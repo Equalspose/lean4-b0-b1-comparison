@@ -1,1 +1,22 @@
+name: B0 vs B1 comparison
+on:
+  workflow_dispatch:
+  push:
+    paths: ['compare.py', 'lean-toolchain', '.github/workflows/compare.yml']
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          use-github-cache: true
+      - name: Run identical-input comparison
+        run: python3 compare.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: b0-b1-results
+          path: results/
 
